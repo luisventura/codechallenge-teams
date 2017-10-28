@@ -3,7 +3,9 @@ package com.applaudo.teamlist.android.model;
 /**
  * Created by azimech49 on 10/27/17.
  */
+
 import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.applaudo.teamlist.android.model.ScheduleGames;
