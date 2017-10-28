@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.applaudo.teamlist.android.R;
 import com.applaudo.teamlist.android.model.Team;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -61,6 +62,10 @@ public class TeamAdapter extends ArrayAdapter<Team> {
 
         mViewHolder.mTeamAddress.setText(mCurrentTeam.getAddress());
         mViewHolder.mTeamName.setText(mCurrentTeam.getTeamName());
+        Glide.with(getContext())
+                .load(mCurrentTeam.getImgLogo())
+                .into(mViewHolder.mTeamLogo);
+
 
         return convertView;
     }
