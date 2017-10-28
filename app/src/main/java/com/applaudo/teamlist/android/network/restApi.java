@@ -25,7 +25,7 @@ public class restApi {
         mRetrofitInstance = retrofit.create(apiWrapper.class);
     }
 
-    public apiWrapper APICall(){
+    public apiWrapper APICall() {
         return mRetrofitInstance;
     }
 }

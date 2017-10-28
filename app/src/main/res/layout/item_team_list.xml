@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/teamlogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@android:drawable/screen_background_dark" />
+
+    <TextView
+        android:id="@+id/teamname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/teamlogo"
+        android:text="Team Name"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/teamaddress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/teamname"
+        android:layout_toRightOf="@+id/teamlogo"
+        android:text="Address"
+        android:textColor="@android:color/black" />
 </RelativeLayout>
