@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.applaudo.teamlist.android.adapter.TeamAdapter;
@@ -14,7 +13,6 @@ import com.applaudo.teamlist.android.network.restApi;
 
 import com.applaudo.teamlist.android.R;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TeamListActivity extends Activity {
+public class MainActivity extends Activity {
 
     ArrayList<Team> teams;
     TeamAdapter mAdapter;
@@ -30,7 +28,7 @@ public class TeamListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_team_list);
+        setContentView(R.layout.activity_main);
 
         teams = new ArrayList<Team>();
         mAdapter = new TeamAdapter(getApplicationContext(),teams);
@@ -51,13 +49,13 @@ public class TeamListActivity extends Activity {
         teams.enqueue(new Callback<List<Team>>() {
             @Override
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
-                Toast.makeText(TeamListActivity.this, "New Teams have been received!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "New Teams have been received!", Toast.LENGTH_SHORT).show();
                 refreshTeams(response.body());
             }
 
             @Override
             public void onFailure(Call<List<Team>> call, Throwable t) {
-                Toast.makeText(TeamListActivity.this, "Failed to refresh! Is your Internet on?", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Failed to refresh! Is your Internet on?", Toast.LENGTH_SHORT).show();
             }
         });
     }
