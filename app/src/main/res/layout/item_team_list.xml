@@ -33,6 +33,7 @@
             android:maxLines="1"
             android:text="Team Name"
             android:textColor="#555555"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -46,7 +47,8 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="Address"
-            android:textColor="#555555" />
+            android:textColor="#555555"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </RelativeLayout>

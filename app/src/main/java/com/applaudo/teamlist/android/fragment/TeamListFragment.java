@@ -1,17 +1,22 @@
 package com.applaudo.teamlist.android.fragment;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.applaudo.teamlist.android.R;
+import com.applaudo.teamlist.android.activity.DetailActivity;
 import com.applaudo.teamlist.android.adapter.TeamAdapter;
 import com.applaudo.teamlist.android.model.Team;
 import com.applaudo.teamlist.android.network.restApi;
@@ -41,8 +46,10 @@ public class TeamListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    ArrayList<Team> teams;
-    TeamAdapter mAdapter;
+    private ArrayList<Team> teams;
+    private TeamAdapter mAdapter;
+    private boolean mDualFragment;
+    private int mSelectedTeam;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,6 +73,29 @@ public class TeamListFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        teams = new ArrayList<Team>();
+        mAdapter = new TeamAdapter(getActivity(),teams);
+        ListView teamlist = getActivity().findViewById(R.id.teamlistview);
+        teamlist.setAdapter(mAdapter);
+        teamlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showTeamDetails(i);
+//                Toast.makeText(getActivity(), "team: " + i + " team in array: " + teams.get(i).getTeamName() , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        View detailsFragment = getActivity().findViewById(R.id.fragment_b);
+
+        mDualFragment = detailsFragment != null && detailsFragment.getVisibility() == View.VISIBLE;
+
+
     }
 
     @Override
@@ -94,10 +124,6 @@ public class TeamListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        teams = new ArrayList<Team>();
-        mAdapter = new TeamAdapter(getActivity(),teams);
-        ((ListView) getActivity().findViewById(R.id.teamlistview)).setAdapter(mAdapter);
 
         requestTeams();
     }
@@ -155,5 +181,28 @@ public class TeamListFragment extends Fragment {
         teams.clear();
         teams.addAll(incomingTeams);
         Log.i("Info", "Teams Amount:" + teams.size());
+    }
+
+    private void showTeamDetails(int id){
+        if(mDualFragment){
+            TeamDetailFragment mTeamDetails = (TeamDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_b);
+            if (mTeamDetails == null){
+                mTeamDetails = TeamDetailFragment.newInstance(1);
+            }
+
+            FragmentTransaction ft = getFragmentManager()
+                    .beginTransaction();
+            ft.replace(R.id.fragment_b, mTeamDetails);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+        }else{
+            Intent intent = new Intent();
+
+            intent.setClass(getActivity(), DetailActivity.class);
+
+            intent.putExtra("index", id);
+
+            startActivity(intent);
+        }
     }
 }
