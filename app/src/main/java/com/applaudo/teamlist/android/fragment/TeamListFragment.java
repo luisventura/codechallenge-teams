@@ -3,9 +3,12 @@ package com.applaudo.teamlist.android.fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +22,9 @@ import com.applaudo.teamlist.android.R;
 import com.applaudo.teamlist.android.activity.DetailActivity;
 import com.applaudo.teamlist.android.adapter.TeamAdapter;
 import com.applaudo.teamlist.android.model.Team;
-import com.applaudo.teamlist.android.network.restApi;
+import com.applaudo.teamlist.android.network.RestApi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +50,7 @@ public class TeamListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ArrayList<Team> teams;
+    private static ArrayList<Team> teams;
     private TeamAdapter mAdapter;
     private boolean mDualFragment;
     private int mSelectedTeam;
@@ -61,16 +65,12 @@ public class TeamListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment TeamListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TeamListFragment newInstance(String param1, String param2) {
+    public static TeamListFragment newInstance() {
         TeamListFragment fragment = new TeamListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,7 +80,11 @@ public class TeamListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         teams = new ArrayList<Team>();
-        mAdapter = new TeamAdapter(getActivity(),teams);
+
+        if(savedInstanceState != null) {
+            teams = savedInstanceState.getParcelableArrayList("laststate");
+        }
+        mAdapter = new TeamAdapter(getActivity(), teams);
         ListView teamlist = getActivity().findViewById(R.id.teamlistview);
         teamlist.setAdapter(mAdapter);
         teamlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,10 +96,20 @@ public class TeamListFragment extends Fragment {
         });
 
         View detailsFragment = getActivity().findViewById(R.id.fragment_b);
-
         mDualFragment = detailsFragment != null && detailsFragment.getVisibility() == View.VISIBLE;
 
+        if(teams.isEmpty()) {
+            requestTeams();
+        }
+    }
 
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelableArrayList("laststate", teams);
     }
 
     @Override
@@ -121,12 +135,6 @@ public class TeamListFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        requestTeams();
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -162,12 +170,12 @@ public class TeamListFragment extends Fragment {
 
     private void requestTeams() {
 
-        Call<List<Team>> teams = restApi.getInstance().APICall().getTeamList();
-        teams.enqueue(new Callback<List<Team>>() {
+        Call<List<Team>> mApicall = RestApi.getInstance().APICall().getTeamList();
+        mApicall.enqueue(new Callback<List<Team>>() {
             @Override
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
                 Toast.makeText(getActivity(), "New Teams have been received!", Toast.LENGTH_SHORT).show();
-                refreshTeams(response.body());
+                saveTeams(response.body());
             }
 
             @Override
@@ -177,10 +185,9 @@ public class TeamListFragment extends Fragment {
         });
     }
 
-    private void refreshTeams(List<Team> incomingTeams) {
+    private void saveTeams(List<Team> incomingTeams) {
         teams.clear();
         teams.addAll(incomingTeams);
-        Log.i("Info", "Teams Amount:" + teams.size());
     }
 
     private void showTeamDetails(int id){
@@ -205,4 +212,6 @@ public class TeamListFragment extends Fragment {
             startActivity(intent);
         }
     }
+
+
 }

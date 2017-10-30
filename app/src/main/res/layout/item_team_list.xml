@@ -9,7 +9,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:padding="5dp"
-        android:src="@android:drawable/screen_background_dark" />
+        android:src="@drawable/logo_placeholder" />
 
     <LinearLayout
         android:id="@+id/textlayout"

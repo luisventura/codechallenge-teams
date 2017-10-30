@@ -4,6 +4,9 @@ package com.applaudo.teamlist.android.model;
  * Created by azimech49 on 10/27/17.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -11,7 +14,12 @@ import com.google.gson.annotations.SerializedName;
 import com.applaudo.teamlist.android.model.ScheduleGames;
 
 
-public class Team {
+public class Team implements Parcelable{
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     @SerializedName("id")
     @Expose
@@ -61,9 +69,60 @@ public class Team {
     @SerializedName("video_url")
     @Expose
     private String videoUrl;
-    @SerializedName("schedule_games")
-    @Expose
-    private List<ScheduleGames> scheduleGames = null;
+
+    public Team() {
+    }
+
+    protected Team(android.os.Parcel in){
+        id = in.readLong();
+        teamName = in.readString();
+        since = in.readString();
+        coach = in.readString();
+        teamNickname = in.readString();
+        stadium = in.readString();
+        imgLogo = in.readString();
+        imgStadium = in.readString();
+        latitude = in.readString();
+        longitude = in.readString();
+        website = in.readString();
+        ticketsUrl = in.readString();
+        address = in.readString();
+        phoneNumber = in.readString();
+        description = in.readString();
+        videoUrl = in.readString();
+    }
+
+    public static final Creator<Team> CREATOR = new Creator<Team>() {
+        @Override
+        public Team createFromParcel(Parcel parcel) {
+            return new Team(parcel);
+        }
+
+        @Override
+        public Team[] newArray(int i) {
+            return new Team[0];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(teamName);
+        parcel.writeString(since);
+        parcel.writeString(coach);
+        parcel.writeString(teamNickname);
+        parcel.writeString(stadium);
+        parcel.writeString(imgLogo);
+        parcel.writeString(imgStadium);
+        parcel.writeString(latitude);
+        parcel.writeString(longitude);
+        parcel.writeString(website);
+        parcel.writeString(ticketsUrl);
+        parcel.writeString(address);
+        parcel.writeString(phoneNumber);
+        parcel.writeString(description);
+        parcel.writeString(videoUrl);
+    }
 
     public Long getId() {
         return id;
@@ -191,14 +250,6 @@ public class Team {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
-    }
-
-    public List<ScheduleGames> getScheduleGames() {
-        return scheduleGames;
-    }
-
-    public void setScheduleGames(List<ScheduleGames> scheduleGames) {
-        this.scheduleGames = scheduleGames;
     }
 
 }

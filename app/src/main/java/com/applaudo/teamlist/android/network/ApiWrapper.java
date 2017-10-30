@@ -13,7 +13,7 @@ import retrofit2.http.GET;
  * Created by azimech49 on 10/27/17.
  */
 
-public interface apiWrapper {
+public interface ApiWrapper {
 
     @GET("applaudo_homework.json")
     Call<List<Team>> getTeamList();

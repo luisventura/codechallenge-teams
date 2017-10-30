@@ -5,18 +5,20 @@
     android:orientation="horizontal"
     android:weightSum="2">
 
-    <LinearLayout
-        android:id="@+id/fragment_a"
-        android:orientation="vertical"
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"></LinearLayout>
+        android:id="@+id/fragment_a"
+        android:layout_weight="1"
+        class="com.applaudo.teamlist.android.fragment.TeamListFragment">
 
-    <LinearLayout
+    </fragment>
+
+    <FrameLayout
         android:id="@+id/fragment_b"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"></LinearLayout>
+        android:layout_weight="1"></FrameLayout>
 
 </LinearLayout>

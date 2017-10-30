@@ -7,25 +7,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by azimech49 on 10/28/17.
  */
 
-public class restApi {
-    private static final restApi ourInstance = new restApi();
+public class RestApi {
+    private static final RestApi ourInstance = new RestApi();
 
-    private apiWrapper mRetrofitInstance;
+    private ApiWrapper mRetrofitInstance;
 
-    public static restApi getInstance() {
+    public static RestApi getInstance() {
         return ourInstance;
     }
 
-    private restApi() {
+    private RestApi() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://applaudostudios.com/external/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        mRetrofitInstance = retrofit.create(apiWrapper.class);
+        mRetrofitInstance = retrofit.create(ApiWrapper.class);
     }
 
-    public apiWrapper APICall() {
+    public ApiWrapper APICall() {
         return mRetrofitInstance;
     }
 }
