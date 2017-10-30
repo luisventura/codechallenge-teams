@@ -82,7 +82,7 @@ public class TeamListFragment extends Fragment {
 
         teams = new ArrayList<Team>();
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             teams = savedInstanceState.getParcelableArrayList("laststate");
         }
         mAdapter = new TeamAdapter(getActivity(), teams);
@@ -99,11 +99,10 @@ public class TeamListFragment extends Fragment {
         View detailsFragment = getActivity().findViewById(R.id.fragment_b);
         mDualFragment = detailsFragment != null && detailsFragment.getVisibility() == View.VISIBLE;
 
-        if(teams.isEmpty()) {
+        if (teams.isEmpty()) {
             requestTeams();
         }
     }
-
 
 
     @Override
@@ -197,11 +196,11 @@ public class TeamListFragment extends Fragment {
         teams.addAll(incomingTeams);
     }
 
-    private void showTeamDetails(Team team){
-        if(mDualFragment){
+    private void showTeamDetails(Team team) {
+        if (mDualFragment) {
             TeamDetailFragment mTeamDetails = (TeamDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_b);
 //            if (mTeamDetails == null){
-                mTeamDetails = TeamDetailFragment.newInstance(team.getVideoUrl(),team.getTeamName(),team.getDescription(),team.getImgLogo(),Double.parseDouble(team.getLatitude()),Double.parseDouble(team.getLongitude()));
+            mTeamDetails = TeamDetailFragment.newInstance(team.getVideoUrl(), team.getTeamName(), team.getDescription(), team.getImgLogo(), Double.parseDouble(team.getLatitude()), Double.parseDouble(team.getLongitude()));
 //            }
 
             FragmentTransaction ft = getFragmentManager()
@@ -209,7 +208,7 @@ public class TeamListFragment extends Fragment {
             ft.replace(R.id.fragment_b, mTeamDetails);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
-        }else{
+        } else {
             Intent intent = new Intent();
 
             intent.setClass(getActivity(), DetailActivity.class);
