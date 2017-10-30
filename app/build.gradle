@@ -6,8 +6,8 @@ android {
         applicationId "com.applaudo.teamlist.android"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 0
-        versionName "0.1.00"
+        versionCode 9
+        versionName "0.1.009"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

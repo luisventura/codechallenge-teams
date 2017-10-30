@@ -6,24 +6,47 @@
 
     <ImageView
         android:id="@+id/teamlogo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="5dp"
         android:src="@android:drawable/screen_background_dark" />
 
-    <TextView
-        android:id="@+id/teamname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/teamlogo"
-        android:text="Team Name"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/teamaddress"
+    <LinearLayout
+        android:id="@+id/textlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/teamname"
+        android:layout_alignBottom="@+id/teamlogo"
+        android:layout_alignTop="@+id/teamlogo"
         android:layout_toRightOf="@+id/teamlogo"
-        android:text="Address"
-        android:textColor="@android:color/black" />
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/teamname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/teamlogo"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="Team Name"
+            android:textColor="#555555"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/teamaddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/teamname"
+            android:layout_toRightOf="@+id/teamlogo"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="Address"
+            android:textColor="#555555" />
+    </LinearLayout>
+
 </RelativeLayout>
