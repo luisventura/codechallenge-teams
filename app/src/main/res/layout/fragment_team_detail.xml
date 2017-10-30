@@ -1,68 +1,80 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.applaudo.teamlist.android.fragment.TeamDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <VideoView
-        android:id="@+id/teamvideo"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp" />
-
-    <ImageView
-        android:id="@+id/teamlogo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:padding="5dp"
-        android:layout_below="@id/teamvideo"
-        android:src="@android:drawable/screen_background_dark" />
-
-    <LinearLayout
-        android:id="@+id/textlayout"
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/teamlogo"
-        android:layout_alignTop="@+id/teamlogo"
-        android:layout_toRightOf="@+id/teamlogo"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:weightSum="2">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/teamname"
+        <VideoView
+            android:id="@+id/teamvideo"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:foregroundGravity="center_horizontal"
+            android:padding="5dp" />
+
+        <RelativeLayout
+            android:id="@+id/textcontainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/teamlogo"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:text="Team Name"
-            android:textColor="#555555"
-            android:textStyle="bold" />
+            android:layout_below="@id/teamvideo">
 
-        <TextView
-            android:id="@+id/teamdescription"
+            <ImageView
+                android:id="@+id/teamlogodetail"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:padding="5dp"
+                android:src="@android:drawable/screen_background_dark" />
+
+            <LinearLayout
+                android:id="@+id/textlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignTop="@+id/teamlogodetail"
+                android:layout_toRightOf="@+id/teamlogodetail"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/teamnamedetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/teamlogodetail"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Team Name"
+                    android:textColor="#555555"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/teamdescriptiondetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/teamname"
+                    android:layout_toRightOf="@+id/teamlogodetail"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center_vertical"
+                    android:text="Description"
+                    android:textColor="#555555" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/mapView"
+            android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/teamname"
-            android:layout_toRightOf="@+id/teamlogo"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:text="Description"
-            android:textColor="#555555" />
+            android:layout_height="400dp"
+            android:layout_below="@id/textcontainer" />
+    </RelativeLayout>
+</ScrollView>
 
-    </LinearLayout>
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/textlayout"
-        android:layout_weight="1" />
 
-</RelativeLayout>

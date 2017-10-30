@@ -1,21 +1,37 @@
 package com.applaudo.teamlist.android.fragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.applaudo.teamlist.android.R;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link TeamDetailFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TeamDetailFragment#newInstance} factory method to
+ * Use the {@link TeamDetailFragment#x} factory method to
  * create an instance of this fragment.
  */
 public class TeamDetailFragment extends Fragment {
@@ -41,9 +57,15 @@ public class TeamDetailFragment extends Fragment {
      * @return A new instance of fragment TeamDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TeamDetailFragment newInstance(int index) {
+    public static TeamDetailFragment newInstance(String videoURL, String name, String description, String logoURL, Double lat, Double lon) {
         TeamDetailFragment fragment = new TeamDetailFragment();
         Bundle args = new Bundle();
+        args.putString("videoURL", videoURL);
+        args.putString("name", name);
+        args.putString("description", description);
+        args.putString("logoURL", logoURL);
+        args.putDouble("latitud", lat);
+        args.putDouble("longitud", lon);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,6 +84,12 @@ public class TeamDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_team_detail, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //setup map
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,9 +111,45 @@ public class TeamDetailFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        if (getActivity().getFragmentManager().findFragmentById(R.id.fragment_b) != null) {
+            FragmentTransaction fragmentTransaction =
+                    getFragmentManager().beginTransaction();
+            fragmentTransaction.remove(getActivity().getFragmentManager().findFragmentById(R.id.fragment_b));
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //setup video
+        VideoView mTeamVideo = getActivity().findViewById(R.id.teamvideo);
+        mTeamVideo.setVideoPath(getArguments().getString("videoURL"));
+
+        MediaController mediaController = new MediaController(getActivity());
+        mediaController.setAnchorView(mTeamVideo);
+        mTeamVideo.setMediaController(mediaController);
+
+        mTeamVideo.resume();
+
+        //load team data
+        Glide.with(getActivity())
+                .load(getArguments().getString("logoURL"))
+                .into((ImageView) getActivity().findViewById(R.id.teamlogodetail));
+
+        ((TextView) getActivity().findViewById(R.id.teamnamedetail)).setText(getArguments().getString("name"));
+        ((TextView) getActivity().findViewById(R.id.teamdescriptiondetail)).setText(getArguments().getString("description"));
+
     }
 
     /**
@@ -102,4 +166,5 @@ public class TeamDetailFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

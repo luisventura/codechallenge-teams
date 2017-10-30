@@ -1,5 +1,6 @@
 package com.applaudo.teamlist.android.fragment;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -90,7 +91,7 @@ public class TeamListFragment extends Fragment {
         teamlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showTeamDetails(i);
+                showTeamDetails(teams.get(i));
 //                Toast.makeText(getActivity(), "team: " + i + " team in array: " + teams.get(i).getTeamName() , Toast.LENGTH_SHORT).show();
             }
         });
@@ -185,17 +186,23 @@ public class TeamListFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
     private void saveTeams(List<Team> incomingTeams) {
         teams.clear();
         teams.addAll(incomingTeams);
     }
 
-    private void showTeamDetails(int id){
+    private void showTeamDetails(Team team){
         if(mDualFragment){
             TeamDetailFragment mTeamDetails = (TeamDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_b);
-            if (mTeamDetails == null){
-                mTeamDetails = TeamDetailFragment.newInstance(1);
-            }
+//            if (mTeamDetails == null){
+                mTeamDetails = TeamDetailFragment.newInstance(team.getVideoUrl(),team.getTeamName(),team.getDescription(),team.getImgLogo(),Double.parseDouble(team.getLatitude()),Double.parseDouble(team.getLongitude()));
+//            }
 
             FragmentTransaction ft = getFragmentManager()
                     .beginTransaction();
@@ -207,7 +214,12 @@ public class TeamListFragment extends Fragment {
 
             intent.setClass(getActivity(), DetailActivity.class);
 
-            intent.putExtra("index", id);
+            intent.putExtra("name", team.getTeamName());
+            intent.putExtra("description", team.getDescription());
+            intent.putExtra("logoURL", team.getImgLogo());
+            intent.putExtra("videoURL", team.getVideoUrl());
+            intent.putExtra("latitud", team.getLatitude());
+            intent.putExtra("longitud", team.getLongitude());
 
             startActivity(intent);
         }
