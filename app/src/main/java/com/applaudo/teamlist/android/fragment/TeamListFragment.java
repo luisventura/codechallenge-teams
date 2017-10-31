@@ -33,23 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TeamListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TeamListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TeamListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private static ArrayList<Team> teams;
     private TeamAdapter mAdapter;
@@ -62,13 +46,6 @@ public class TeamListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment TeamListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static TeamListFragment newInstance() {
         TeamListFragment fragment = new TeamListFragment();
         Bundle args = new Bundle();
@@ -116,8 +93,6 @@ public class TeamListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -153,23 +128,12 @@ public class TeamListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
     private void requestTeams() {
-
         Call<List<Team>> mApicall = RestApi.getInstance().APICall().getTeamList();
         mApicall.enqueue(new Callback<List<Team>>() {
             @Override
@@ -185,12 +149,6 @@ public class TeamListFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
     private void saveTeams(List<Team> incomingTeams) {
         teams.clear();
         teams.addAll(incomingTeams);
@@ -199,15 +157,17 @@ public class TeamListFragment extends Fragment {
     private void showTeamDetails(Team team) {
         if (mDualFragment) {
             TeamDetailFragment mTeamDetails = (TeamDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_b);
-//            if (mTeamDetails == null){
-            mTeamDetails = TeamDetailFragment.newInstance(team.getVideoUrl(), team.getTeamName(), team.getDescription(), team.getImgLogo(), Double.parseDouble(team.getLatitude()), Double.parseDouble(team.getLongitude()));
-//            }
 
-            FragmentTransaction ft = getFragmentManager()
-                    .beginTransaction();
-            ft.replace(R.id.fragment_b, mTeamDetails);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
+            if (mTeamDetails == null){
+                mTeamDetails = TeamDetailFragment.newInstance(team);
+                FragmentTransaction ft = getFragmentManager()
+                        .beginTransaction();
+                ft.replace(R.id.fragment_b, mTeamDetails);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+            }else{
+                mTeamDetails.loadTeamDetails(team);
+            }
         } else {
             Intent intent = new Intent();
 

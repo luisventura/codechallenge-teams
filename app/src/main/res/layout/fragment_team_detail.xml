@@ -8,10 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/mapHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp" />
+
         <VideoView
             android:id="@+id/teamvideo"
             android:layout_width="match_parent"
             android:layout_height="150dp"
+            android:layout_below="@id/mapHolder"
             android:foregroundGravity="center_horizontal"
             android:padding="5dp" />
 
@@ -67,12 +74,15 @@
 
         </RelativeLayout>
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/mapView"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_below="@id/textcontainer" />
+        <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:id="@+id/mapHolder"-->
+        <!--android:padding="15dp"-->
+        <!--android:name="com.applaudo.teamlist.android.fragment.MapHolder"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@id/textcontainer"/>-->
+
+
     </RelativeLayout>
 </ScrollView>
 
