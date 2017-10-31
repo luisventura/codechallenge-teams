@@ -3,8 +3,7 @@ package com.applaudo.teamlist.android.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,24 +11,14 @@ import android.view.ViewGroup;
 import com.applaudo.teamlist.android.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MapHolder.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MapHolder#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MapHolder extends Fragment{
+public class MapHolder extends Fragment {
 
     MapView mMapview;
     private GoogleMap mMap;
@@ -78,7 +67,7 @@ public class MapHolder extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_map_holder, container, false);
         mMapview = (MapView) v.findViewById(R.id.map);
         mMapview.onCreate(savedInstanceState);
@@ -86,7 +75,6 @@ public class MapHolder extends Fragment{
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
-            Log.i("MAP", "Successfully initialized map????");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,7 +82,7 @@ public class MapHolder extends Fragment{
         mMapview.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                mMap=googleMap;
+                mMap = googleMap;
             }
         });
 
@@ -124,28 +112,15 @@ public class MapHolder extends Fragment{
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-    public void setLocation(Double lat, Double lon, String location){
-        Log.i("map", "setting location...");
+    public void setLocation(Double lat, Double lon, String location) {
         LatLng mLocation = new LatLng(lat, lon);
         mMap.addMarker(new MarkerOptions().position(mLocation).title(location)).showInfoWindow();
 
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mLocation).zoom(7).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
     }
 }

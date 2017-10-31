@@ -1,13 +1,12 @@
 package com.applaudo.teamlist.android.activity;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.applaudo.teamlist.android.R;
 import com.applaudo.teamlist.android.fragment.TeamDetailFragment;
 
-public class DetailActivity extends Activity {
+public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class DetailActivity extends Activity {
 
             details.setArguments(getIntent().getExtras());
 
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, details).commit();
 
         }

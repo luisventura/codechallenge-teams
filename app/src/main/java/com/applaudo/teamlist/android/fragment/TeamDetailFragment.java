@@ -1,12 +1,10 @@
 package com.applaudo.teamlist.android.fragment;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +20,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.Map;
 
-public class TeamDetailFragment extends Fragment {
+public class TeamDetailFragment extends Fragment{
 
     private Team mTeam;
-
-    private OnFragmentInteractionListener mListener;
 
     public TeamDetailFragment() {
         // Required empty public constructor
@@ -48,12 +44,7 @@ public class TeamDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_team_detail, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        View v = inflater.inflate(R.layout.fragment_team_detail, container, false);
         MapHolder mMapHolder = (MapHolder) getFragmentManager().findFragmentById(R.id.mapHolder);
 
         if (mMapHolder == null) {
@@ -64,24 +55,9 @@ public class TeamDetailFragment extends Fragment {
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
         }
+        return v;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -95,7 +71,7 @@ public class TeamDetailFragment extends Fragment {
 
         if (getActivity().getFragmentManager().findFragmentById(R.id.fragment_b) != null) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.remove(getActivity().getFragmentManager().findFragmentById(R.id.fragment_b));
+            fragmentTransaction.remove(getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_b));
             fragmentTransaction.commit();
         }
     }
@@ -103,7 +79,6 @@ public class TeamDetailFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -134,12 +109,11 @@ public class TeamDetailFragment extends Fragment {
     }
 
     public void setStadiumMap(Double lat, Double lon, String stadium){
-        MapHolder mMapHolder = (MapHolder) getActivity().getFragmentManager().findFragmentById(R.id.mapHolder);
+        MapHolder mMapHolder = (MapHolder) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapHolder);
         if(mMapHolder!=null){
             mMapHolder.setLocation(lat,lon,stadium);
-            Log.i("map","set location yay");
         }else{
-            Log.i("map","map holder is null");
+            Log.i("Map","Map fragment is null");
         }
     }
 
@@ -147,8 +121,6 @@ public class TeamDetailFragment extends Fragment {
         this.mTeam = mTeam;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
+
 
 }

@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_launcher_beta_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MyTheme">
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,10 +33,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBKhm0bUE6GgyNv1xQwoLAcrrkTQFa7RXY" />
-
-        <activity
-            android:name=".fragment.MapsFragment"
-            android:label="@string/title_activity_maps" />
     </application>
 
 </manifest>

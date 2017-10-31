@@ -1,17 +1,12 @@
 package com.applaudo.teamlist.android.fragment;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +20,6 @@ import com.applaudo.teamlist.android.adapter.TeamAdapter;
 import com.applaudo.teamlist.android.model.Team;
 import com.applaudo.teamlist.android.network.RestApi;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +63,6 @@ public class TeamListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 showTeamDetails(teams.get(i));
-//                Toast.makeText(getActivity(), "team: " + i + " team in array: " + teams.get(i).getTeamName() , Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -85,7 +78,6 @@ public class TeamListFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putParcelableArrayList("laststate", teams);
     }
 
@@ -99,33 +91,13 @@ public class TeamListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_team_list, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     public interface OnFragmentInteractionListener {
@@ -156,8 +128,7 @@ public class TeamListFragment extends Fragment {
 
     private void showTeamDetails(Team team) {
         if (mDualFragment) {
-            TeamDetailFragment mTeamDetails = (TeamDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_b);
-
+            TeamDetailFragment mTeamDetails = (TeamDetailFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_b);
             if (mTeamDetails == null){
                 mTeamDetails = TeamDetailFragment.newInstance(team);
                 FragmentTransaction ft = getFragmentManager()

@@ -13,9 +13,6 @@ import android.widget.TextView;
 import com.applaudo.teamlist.android.R;
 import com.applaudo.teamlist.android.model.Team;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
 
 import java.util.ArrayList;
 
