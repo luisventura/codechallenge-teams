@@ -1,11 +1,11 @@
 package com.applaudo.teamlist.android.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +61,15 @@ public class TeamListFragment extends Fragment {
             }
         });
 
+        final SwipeRefreshLayout mSwipeLayout = getActivity().findViewById(R.id.teamlist_srl);
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestTeams();
+                mSwipeLayout.setRefreshing(false);
+            }
+        });
+
         View detailsFragment = getActivity().findViewById(R.id.fragment_b);
         mDualFragment = detailsFragment != null && detailsFragment.getVisibility() == View.VISIBLE;
         if (teams.isEmpty()) {
@@ -79,7 +88,7 @@ public class TeamListFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_team_list, container, false);
     }
-    
+
     private void requestTeams() {
         Call<List<Team>> mApicall = RestApi.getInstance().APICall().getTeamList();
         mApicall.enqueue(new Callback<List<Team>>() {
@@ -125,6 +134,7 @@ public class TeamListFragment extends Fragment {
             intent.putExtra("videoURL", team.getVideoUrl());
             intent.putExtra("latitud", team.getLatitude());
             intent.putExtra("longitud", team.getLongitude());
+            intent.putExtra("stadium", team.getStadium());
 
             startActivity(intent);
         }

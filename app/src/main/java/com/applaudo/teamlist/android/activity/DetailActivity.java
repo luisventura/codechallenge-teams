@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.applaudo.teamlist.android.fragment.TeamDetailFragment;
+import com.applaudo.teamlist.android.model.Team;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -17,8 +18,17 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
         if (savedInstanceState == null) {
+            Team mTeam = new Team();
 
-            TeamDetailFragment details = new TeamDetailFragment();
+            mTeam.setTeamName(getIntent().getExtras().getString("name"));
+            mTeam.setDescription(getIntent().getExtras().getString("description"));
+            mTeam.setImgLogo(getIntent().getExtras().getString("logoURL"));
+            mTeam.setVideoUrl(getIntent().getExtras().getString("videoURL"));
+            mTeam.setLatitude(getIntent().getExtras().getString("latitud"));
+            mTeam.setLongitude(getIntent().getExtras().getString("longitud"));
+            mTeam.setStadium(getIntent().getExtras().getString("stadium"));
+
+            TeamDetailFragment details = TeamDetailFragment.newInstance(mTeam);
 
             details.setArguments(getIntent().getExtras());
 

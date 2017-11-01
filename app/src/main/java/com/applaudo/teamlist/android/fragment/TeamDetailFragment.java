@@ -30,6 +30,7 @@ public class TeamDetailFragment extends Fragment {
     public static TeamDetailFragment newInstance(Team team) {
         TeamDetailFragment fragment = new TeamDetailFragment();
         fragment.setmTeam(team);
+
         return fragment;
     }
 

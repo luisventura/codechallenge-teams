@@ -6,8 +6,8 @@ android {
         applicationId "com.applaudo.teamlist.android"
         minSdkVersion 19
         targetSdkVersion 21
-        versionCode 9
-        versionName "0.1.009"
+        versionCode 13
+        versionName "0.1.013"
     }
     buildTypes {
         release {

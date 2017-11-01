@@ -85,18 +85,18 @@ public class MapHolderFragment extends Fragment {
     }
 
     public boolean setLocation(final Double lat, final Double lon, final String location) {
-        if(mMapInitialized) {
+        if (mMapInitialized) {
             LatLng mLocation = new LatLng(lat, lon);
             mMap.addMarker(new MarkerOptions().position(mLocation).title(location)).showInfoWindow();
 
             CameraPosition cameraPosition = new CameraPosition.Builder().target(mLocation).zoom(6).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             return true;
-        }else return false;
+        } else return false;
     }
 
-    public void initializeMap(){
-        mMapInitialized=true;
+    public void initializeMap() {
+        mMapInitialized = true;
         mMap.getUiSettings().setAllGesturesEnabled(false);
         LatLng mLocation = new LatLng(51.5074, 0.1278);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mLocation).zoom(6).build();
