@@ -1,7 +1,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context="com.applaudo.teamlist.android.fragment.TeamDetailFragment">
 
     <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,10 +11,21 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true">
 
+        <VideoView
+            android:id="@+id/teamvideo"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:focusable="false"
+            android:foregroundGravity="center_horizontal"
+            android:padding="5dp" />
+
         <RelativeLayout
             android:id="@+id/textcontainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/teamvideo"
+
             android:animateLayoutChanges="true">
 
             <ImageView
@@ -20,7 +33,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:padding="5dp"
-                android:src="@android:drawable/screen_background_dark" />
+                android:src="@drawable/logo_placeholder" />
 
             <LinearLayout
                 android:id="@+id/textlayout"
@@ -42,7 +55,7 @@
                     android:fontFamily="sans-serif-light"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="Team Name"
+                    android:text=""
                     android:textColor="#555555"
                     android:textStyle="bold" />
 
@@ -55,7 +68,7 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center_vertical"
-                    android:text="Description"
+                    android:text="Select a team from the left panel"
                     android:textColor="#555555"
                     android:textSize="10sp" />
 
@@ -76,23 +89,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/mapTitle"
+            android:focusable="false"
             android:padding="10dp" />
 
-        <TextView
-            android:id="@+id/videoTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/mapHolder"
-            android:text="Random Video" />
-
-        <VideoView
-            android:id="@+id/teamvideo"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@id/videoTitle"
-            android:foregroundGravity="center_horizontal"
-            android:padding="5dp" />
     </RelativeLayout>
 </ScrollView>
 

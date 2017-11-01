@@ -1,10 +1,8 @@
 package com.applaudo.teamlist.android.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,7 @@ public class MapHolderFragment extends Fragment {
 
     MapView mMapview;
     private GoogleMap mMap;
-
+    boolean mMapInitialized = false;
 
     public MapHolderFragment() {
     }
@@ -38,7 +36,7 @@ public class MapHolderFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mMapview!=null) mMapview.onResume();
+        if (mMapview != null) mMapview.onResume();
     }
 
     @Override
@@ -79,17 +77,28 @@ public class MapHolderFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                initializeMap();
             }
         });
 
         return v;
     }
 
-    public void setLocation(Double lat, Double lon, String location) {
-        LatLng mLocation = new LatLng(lat, lon);
-        mMap.addMarker(new MarkerOptions().position(mLocation).title(location)).showInfoWindow();
+    public boolean setLocation(final Double lat, final Double lon, final String location) {
+        if(mMapInitialized) {
+            LatLng mLocation = new LatLng(lat, lon);
+            mMap.addMarker(new MarkerOptions().position(mLocation).title(location)).showInfoWindow();
 
-        Log.i("Azi", "mapholderfrag setting location");
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(mLocation).zoom(6).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            return true;
+        }else return false;
+    }
+
+    public void initializeMap(){
+        mMapInitialized=true;
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+        LatLng mLocation = new LatLng(51.5074, 0.1278);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mLocation).zoom(6).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }

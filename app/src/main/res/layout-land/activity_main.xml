@@ -6,19 +6,19 @@
     android:weightSum="2">
 
     <fragment
+        android:id="@+id/fragment_a"
+        class="com.applaudo.teamlist.android.fragment.TeamListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_a"
-        android:layout_weight="1"
-        class="com.applaudo.teamlist.android.fragment.TeamListFragment">
+        android:layout_weight="1">
 
     </fragment>
 
     <FrameLayout
         android:id="@+id/fragment_b"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"></FrameLayout>
+        android:layout_weight="1"
+        android:orientation="vertical"></FrameLayout>
 
 </LinearLayout>

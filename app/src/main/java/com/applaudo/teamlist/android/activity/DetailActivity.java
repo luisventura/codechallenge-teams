@@ -25,6 +25,7 @@ public class DetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, details).commit();
 
+            setTitle("Detail");
         }
     }
 }

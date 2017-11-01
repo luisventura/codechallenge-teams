@@ -1,13 +1,11 @@
 package com.applaudo.teamlist.android.fragment;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +31,6 @@ public class TeamListFragment extends Fragment {
     private static ArrayList<Team> teams;
     private TeamAdapter mAdapter;
     private boolean mDualFragment;
-    private int mSelectedTeam;
-
-    private OnFragmentInteractionListener mListener;
 
     public TeamListFragment() {
     }
@@ -71,9 +66,6 @@ public class TeamListFragment extends Fragment {
         if (teams.isEmpty()) {
             requestTeams();
         }
-
-        if(mDualFragment) Log.i("Azi","there is fragment b");
-        else Log.i("Azi","there is not fragment b");
     }
 
     @Override
@@ -87,25 +79,16 @@ public class TeamListFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_team_list, container, false);
     }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
-
+    
     private void requestTeams() {
         Call<List<Team>> mApicall = RestApi.getInstance().APICall().getTeamList();
         mApicall.enqueue(new Callback<List<Team>>() {
             @Override
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
-                Toast.makeText(getActivity(), "New Teams have been received!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Teams have been received!", Toast.LENGTH_SHORT).show();
                 saveTeams(response.body());
             }
+
             @Override
             public void onFailure(Call<List<Team>> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to refresh! Is your Internet on?", Toast.LENGTH_SHORT).show();
@@ -123,15 +106,12 @@ public class TeamListFragment extends Fragment {
         if (mDualFragment) {
             TeamDetailFragment mTeamDetails = (TeamDetailFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_b);
             if (mTeamDetails == null) {
-                Log.i("Azi","teamdetailfragment is null, must instance");
                 mTeamDetails = TeamDetailFragment.newInstance(team);
                 FragmentTransaction ft = getActivity().getSupportFragmentManager()
                         .beginTransaction();
                 ft.replace(R.id.fragment_b, mTeamDetails);
-//                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             } else {
-                Log.i("Azi","just refreshing data");
                 mTeamDetails.loadTeamDetails(team);
             }
         } else {

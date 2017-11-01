@@ -1,6 +1,7 @@
 package com.applaudo.teamlist.android.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,14 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.applaudo.teamlist.android.R;
+import com.applaudo.teamlist.android.extra.GlideApp;
 import com.applaudo.teamlist.android.model.Team;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 
 public class TeamDetailFragment extends Fragment {
 
@@ -32,7 +33,6 @@ public class TeamDetailFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,23 +46,21 @@ public class TeamDetailFragment extends Fragment {
         MapHolderFragment mMapHolderFragment = (MapHolderFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapHolder);
 
         if (mMapHolderFragment == null) {
-            Log.i("Azi","oncreateviewdetail instantiating new mapholder fragment instance");
             mMapHolderFragment = mMapHolderFragment.newInstance();
             FragmentTransaction ft = getFragmentManager()
                     .beginTransaction();
-            ft.replace(R.id.mapHolder, mMapHolderFragment,"mapa");
+            ft.replace(R.id.mapHolder, mMapHolderFragment, "mapa");
             ft.commit();
         }
         loadTeamDetails(mTeam);
     }
 
-
     public void loadTeamDetails(Team team) {
-        this.mTeam = team;
-        if(mTeam==null) return;
+        if (team != null) this.mTeam = team;
+        if (mTeam == null) return;
 
         VideoView mTeamVideo = getActivity().findViewById(R.id.teamvideo);
-        if(mTeamVideo!=null) {
+        if (mTeamVideo != null) {
             mTeamVideo.setVideoPath(mTeam.getVideoUrl());
             MediaController mediaController = new MediaController(getContext());
             mediaController.setAnchorView(mTeamVideo);
@@ -70,29 +68,43 @@ public class TeamDetailFragment extends Fragment {
             mTeamVideo.resume();
         }
         //load team data
-        Glide.with(getActivity())
+        GlideApp.with(getActivity())
                 .load(mTeam.getImgLogo())
+                .placeholder(R.drawable.logo_placeholder)
                 .into((ImageView) getActivity().findViewById(R.id.teamlogodetail));
 
         ((TextView) getActivity().findViewById(R.id.teamnamedetail)).setText(mTeam.getTeamName());
         ((TextView) getActivity().findViewById(R.id.teamdescriptiondetail)).setText(mTeam.getDescription());
 
-        setStadiumMap(Double.parseDouble(mTeam.getLatitude()), Double.parseDouble(mTeam.getLongitude()), mTeam.getStadium());
+        setStadiumMap(Double.parseDouble(mTeam.getLatitude()), Double.parseDouble(mTeam.getLongitude()), mTeam.getStadium(), 0);
     }
 
-    public void setStadiumMap(Double lat, Double lon, String stadium) {
+    public void setStadiumMap(Double lat, Double lon, String stadium, final int counter) {
+        if (counter >= 10) {
+            Log.i("Map", "Error on MapFragment creation or GoogleMap API callback");
+            return;
+        }
         MapHolderFragment mMapHolderFragment = (MapHolderFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapHolder);
         if (mMapHolderFragment != null) {
-            Log.i("Azi", "setstadiummap fragment not null");
-            mMapHolderFragment.setLocation(lat, lon, stadium);
+            if (!mMapHolderFragment.setLocation(lat, lon, stadium)) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setStadiumMap(Double.parseDouble(mTeam.getLatitude()), Double.parseDouble(mTeam.getLongitude()), mTeam.getStadium(), counter);
+                    }
+                }, 300);
+            }
         } else {
-            Log.i("Azi", "setstadiummap fragment not null");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setStadiumMap(Double.parseDouble(mTeam.getLatitude()), Double.parseDouble(mTeam.getLongitude()), mTeam.getStadium(), counter);
+                }
+            }, 1000);
         }
     }
 
     public void setmTeam(Team mTeam) {
         this.mTeam = mTeam;
     }
-
-
 }
