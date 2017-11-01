@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
 import com.applaudo.teamlist.android.model.ScheduleGames;
 
 
-public class Team implements Parcelable{
+public class Team implements Parcelable {
 
     @Override
     public int describeContents() {
@@ -73,7 +73,7 @@ public class Team implements Parcelable{
     public Team() {
     }
 
-    protected Team(android.os.Parcel in){
+    protected Team(android.os.Parcel in) {
         id = in.readLong();
         teamName = in.readString();
         since = in.readString();

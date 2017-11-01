@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,50 +19,44 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapHolder extends Fragment {
+public class MapHolderFragment extends Fragment {
 
     MapView mMapview;
     private GoogleMap mMap;
 
-    private OnFragmentInteractionListener mListener;
 
-    public MapHolder() {
+    public MapHolderFragment() {
     }
 
-    public static MapHolder newInstance() {
-        MapHolder fragment = new MapHolder();
+    public static MapHolderFragment newInstance() {
+        MapHolderFragment fragment = new MapHolderFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        mMapview.onResume();
+        if(mMapview!=null) mMapview.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMapview.onPause();
+        if (mMapview != null) mMapview.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapview.onDestroy();
+        if (mMapview != null) mMapview.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapview.onLowMemory();
+        if (mMapview != null) mMapview.onLowMemory();
     }
 
     @Override
@@ -69,7 +64,8 @@ public class MapHolder extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_map_holder, container, false);
-        mMapview = (MapView) v.findViewById(R.id.map);
+
+        mMapview = v.findViewById(R.id.map);
         mMapview.onCreate(savedInstanceState);
         mMapview.onResume();
 
@@ -89,38 +85,12 @@ public class MapHolder extends Fragment {
         return v;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
-
     public void setLocation(Double lat, Double lon, String location) {
         LatLng mLocation = new LatLng(lat, lon);
         mMap.addMarker(new MarkerOptions().position(mLocation).title(location)).showInfoWindow();
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(mLocation).zoom(7).build();
+        Log.i("Azi", "mapholderfrag setting location");
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(mLocation).zoom(6).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }

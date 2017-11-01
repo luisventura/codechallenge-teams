@@ -1,8 +1,7 @@
 package com.applaudo.teamlist.android.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -17,15 +16,14 @@ import android.widget.VideoView;
 import com.applaudo.teamlist.android.R;
 import com.applaudo.teamlist.android.model.Team;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 
-import java.util.Map;
-
-public class TeamDetailFragment extends Fragment{
+public class TeamDetailFragment extends Fragment {
 
     private Team mTeam;
 
     public TeamDetailFragment() {
-        // Required empty public constructor
     }
 
     public static TeamDetailFragment newInstance(Team team) {
@@ -34,69 +32,43 @@ public class TeamDetailFragment extends Fragment{
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_team_detail, container, false);
-        MapHolder mMapHolder = (MapHolder) getFragmentManager().findFragmentById(R.id.mapHolder);
-
-        if (mMapHolder == null) {
-            mMapHolder = mMapHolder.newInstance();
-            FragmentTransaction ft = getFragmentManager()
-                    .beginTransaction();
-            ft.replace(R.id.mapHolder, mMapHolder);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
-        }
-        return v;
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("savedInstanceTeam", mTeam);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (getActivity().getFragmentManager().findFragmentById(R.id.fragment_b) != null) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.remove(getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_b));
-            fragmentTransaction.commit();
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
+        return inflater.inflate(R.layout.fragment_team_detail, container, false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        MapHolderFragment mMapHolderFragment = (MapHolderFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapHolder);
+
+        if (mMapHolderFragment == null) {
+            Log.i("Azi","oncreateviewdetail instantiating new mapholder fragment instance");
+            mMapHolderFragment = mMapHolderFragment.newInstance();
+            FragmentTransaction ft = getFragmentManager()
+                    .beginTransaction();
+            ft.replace(R.id.mapHolder, mMapHolderFragment,"mapa");
+            ft.commit();
+        }
         loadTeamDetails(mTeam);
     }
 
-    public void loadTeamDetails(Team team){
-        setmTeam(team);
+
+    public void loadTeamDetails(Team team) {
+        this.mTeam = team;
+        if(mTeam==null) return;
 
         VideoView mTeamVideo = getActivity().findViewById(R.id.teamvideo);
-        mTeamVideo.setVideoPath(mTeam.getVideoUrl());
-        MediaController mediaController = new MediaController(getActivity());
-        mediaController.setAnchorView(mTeamVideo);
-        mTeamVideo.setMediaController(mediaController);
-//        mTeamVideo.resume();
-
+        if(mTeamVideo!=null) {
+            mTeamVideo.setVideoPath(mTeam.getVideoUrl());
+            MediaController mediaController = new MediaController(getContext());
+            mediaController.setAnchorView(mTeamVideo);
+            mTeamVideo.setMediaController(mediaController);
+            mTeamVideo.resume();
+        }
         //load team data
         Glide.with(getActivity())
                 .load(mTeam.getImgLogo())
@@ -105,22 +77,22 @@ public class TeamDetailFragment extends Fragment{
         ((TextView) getActivity().findViewById(R.id.teamnamedetail)).setText(mTeam.getTeamName());
         ((TextView) getActivity().findViewById(R.id.teamdescriptiondetail)).setText(mTeam.getDescription());
 
-        setStadiumMap(Double.parseDouble(mTeam.getLatitude()),Double.parseDouble(mTeam.getLongitude()),mTeam.getStadium());
+        setStadiumMap(Double.parseDouble(mTeam.getLatitude()), Double.parseDouble(mTeam.getLongitude()), mTeam.getStadium());
     }
 
-    public void setStadiumMap(Double lat, Double lon, String stadium){
-        MapHolder mMapHolder = (MapHolder) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapHolder);
-        if(mMapHolder!=null){
-            mMapHolder.setLocation(lat,lon,stadium);
-        }else{
-            Log.i("Map","Map fragment is null");
+    public void setStadiumMap(Double lat, Double lon, String stadium) {
+        MapHolderFragment mMapHolderFragment = (MapHolderFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapHolder);
+        if (mMapHolderFragment != null) {
+            Log.i("Azi", "setstadiummap fragment not null");
+            mMapHolderFragment.setLocation(lat, lon, stadium);
+        } else {
+            Log.i("Azi", "setstadiummap fragment not null");
         }
     }
 
     public void setmTeam(Team mTeam) {
         this.mTeam = mTeam;
     }
-
 
 
 }
